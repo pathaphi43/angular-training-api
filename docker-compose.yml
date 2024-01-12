@@ -10,18 +10,18 @@ services:
     ports:
       - 5432:5432
 
-#  angular-training:
-#    restart: always
-#    image: angular-training
-#    build:
-#      dockerfile: Dockerfile
-#      context: .
-#    environment:
-#      - TZ=Asia/Bangkok
-#    ports:
-#      - 8081:8081
-#    networks:
-#      - network-angular-training
-#networks:
-#  network-angular-training:
-#    driver: bridge
+  angular-training:
+    restart: always
+    image: angular-training
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - TZ=Asia/Bangkok
+    ports:
+      - 8081:8081
+    networks:
+      - network-angular-training
+networks:
+  network-angular-training:
+    driver: bridge
