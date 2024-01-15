@@ -1,27 +1,35 @@
 version: '3.9'
 services:
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER:  angular
-      POSTGRES_PASSWORD:  Sys@dmin1
-      POSTGRES_DB:  angular_training
-    ports:
-      - 5432:5432
-
   angular-training:
     restart: always
     image: angular-training
     build:
       dockerfile: Dockerfile
       context: .
+    container_name: angular-training
+    depends_on:
+      - db
     environment:
       - TZ=Asia/Bangkok
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/angular_training
+      - SPRING_DATASOURCE_USERNAME=angular
+      - SPRING_DATASOURCE_PASSWORD=Sys@dmin1
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - 8081:8081
-    networks:
-      - network-angular-training
-networks:
-  network-angular-training:
-    driver: bridge
+  #    networks:
+  #      - network-angular-training
+  #networks:
+  #  network-angular-training:
+  #    driver: bridge
+
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_USER: angular
+      POSTGRES_PASSWORD: Sys@dmin1
+      POSTGRES_DB: angular_training
+    ports:
+      - 5432:5432
