@@ -1,6 +1,7 @@
 package com.me.angular.training.api.service;
 
 
+import com.me.angular.training.api.configuration.ExceptionHandle;
 import com.me.angular.training.api.entities.Products;
 import com.me.angular.training.api.repositories.ProductsRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +16,20 @@ import java.util.List;
 public class ProductService {
     private final ProductsRepository productsRepository;
 
-    public List<Products> getAllProduct() {
+    public List<Products> getAll() {
         return productsRepository.findAll();
     }
 
-    public Products addProduct(Products products) {
+    public Products getById(long id) {
+        return productsRepository.findById(id).orElseThrow(() -> new ExceptionHandle("ไม่พบ Product id: " + id));
+    }
+
+    public Products add(Products products) {
         return productsRepository.save(products);
     }
 
-    public Products updateProduct(long id, Products products) {
-        Products old = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("ไม่พบ ID: "+id));
+    public Products update(long id, Products products) {
+        Products old = getById(id);
         old.setCategory(products.getCategory());
         old.setTitle(products.getTitle());
         old.setPrice(products.getPrice());
@@ -32,9 +37,8 @@ public class ProductService {
         return productsRepository.save(old);
     }
 
-    public void deleteProduct(long id) {
-        Products old = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("ไม่พบ ID: "+id));
-        productsRepository.deleteById(old.getId());
+    public void delete(long id) {
+        productsRepository.deleteById(getById(id).getId());
     }
 }
 
